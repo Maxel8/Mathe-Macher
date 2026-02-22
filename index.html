@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathe-Macher</title>
+
+    <style>
+    body {
+        background-color: #fff8e7;
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 20px;
+    }
+
+    p {
+        font-size: 2em;
+        margin: 10px 0;
+    }
+
+    #aufgabe-container {
+        display: flex;
+        width: 100%;
+        max-width: 800px;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    #aufgabe-container span, #ergebnis_user {
+        font-size: 3em;
+        margin: 0 10px;
+    }
+
+    input[type="number"] {
+        width: 200px;
+        padding: 10px;
+        font-size: 3em;
+        text-align: center;
+        border-radius: 10px;
+        border: 2px solid #ccc;
+    }
+
+    button {
+        background-color: #ff4c4c;
+        color: white;
+        font-size: 2em;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-bottom: 20px;
+    }
+
+    button:hover {
+        background-color: #e60000;
+    }
+
+    #feedback, #ergebnis-richtig, #streak {
+        font-size: 2em;
+        margin: 10px 0;
+        text-align: center;
+    }
+    </style>
+</head>
+<body>
+
+<div id="aufgabe-container">
+    <span id="zahl1"></span>
+    <span id="operator"></span>
+    <span id="zahl2"></span>
+    =
+    <input type="number" id="ergebnis_user">
+</div>
+
+<button onclick="check()">Prüfen</button>
+
+<p id="feedback"></p>
+<p id="ergebnis-richtig"></p>
+<p>Streak: <span id="streak"></span></p>
+
+<script>
+let operator = 0;
+let zahl1 = 0;
+let zahl2 = 0;
+let ergebnis = 0;
+let feedback = "";
+let streak = Number(localStorage.getItem("streak")) || 0;
+
+// Streak beim Laden anzeigen
+document.getElementById('streak').textContent = streak;
+
+function init() {
+    function randomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }        
+
+    operator = randomInt(1, 4);
+
+    if (operator === 1) {
+        operator = "+";
+        zahl1 = randomInt(1, 100);
+        zahl2 = randomInt(0, 100-zahl1);
+    } else if (operator === 2) {
+        operator = "-";
+        zahl1 = randomInt(1, 100);
+        zahl2 = randomInt(1, zahl1 - 1);
+    } else if (operator === 3) {
+        operator = "x";
+        zahl1 = randomInt(1, 10);
+        zahl2 = randomInt(0, 10);
+    } else if (operator === 4) {
+        operator = ":";
+        zahl1 = randomInt(1, 10);
+        zahl2 = randomInt(1, 10);
+        zahl1 = zahl1 * zahl2;
+    }
+
+    document.getElementById('operator').textContent = operator;
+    document.getElementById('zahl1').textContent = zahl1;
+    document.getElementById('zahl2').textContent = zahl2;
+    document.getElementById('feedback').textContent = "";
+    document.getElementById('ergebnis_user').value = "";
+    document.getElementById('ergebnis-richtig').textContent = "";
+}
+
+init();
+
+function check() {
+    let ergebnis_user = Number(document.getElementById('ergebnis_user').value);
+
+    if (operator === "+") {
+        ergebnis = zahl1 + zahl2;
+    } else if (operator === "-") {
+        ergebnis = zahl1 - zahl2;
+    } else if (operator === "x") {
+        ergebnis = zahl1 * zahl2;
+    } else if (operator === ":") {
+        ergebnis = zahl1 / zahl2;
+    }
+
+    if (ergebnis_user === ergebnis) {
+        feedback = "Richtig!";
+        streak += 1;
+    } else {
+        feedback = "Falsch!";
+        streak = 0;
+    }
+
+    localStorage.setItem("streak", streak);
+
+    document.getElementById('feedback').textContent = feedback;
+    document.getElementById('streak').textContent = streak;
+
+    if (feedback === "Falsch!") {
+        document.getElementById('ergebnis-richtig').textContent = "Das Ergebnis ist: " + ergebnis;
+    } else {
+        document.getElementById('ergebnis-richtig').textContent = "";
+    }
+
+    setTimeout(() => {
+        init();
+    }, 5000);
+}
+</script>
+
+</body>
+</html>
