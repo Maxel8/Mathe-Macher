@@ -30,6 +30,7 @@ p {
 
 #aufgabe-container {
     display: flex;
+    flex-wrap: wrap; /* Zeilenumbruch erlauben */
     width: 90%;
     max-width: 800px;
     justify-content: center;
@@ -42,10 +43,16 @@ p {
     margin: 0 10px;
 }
 
+/* Optional: Gleichzeichen optisch hervorheben */
+#gleichzeichen {
+    flex-shrink: 0; /* verhindert, dass es schrumpft */
+}
 /* Potenz optisch kleiner und hochgestellt */
 sup {
-    font-size: 0.6em;
-    vertical-align: super;
+    font-size: 0.6em;      /* Schrift bleibt klein */
+    position: relative;     
+    top: -1.2em;           /* höher über der Basiszahl */
+    margin-left: 2px;      /* Abstand zur Zahl */
 }
 
 input[type="number"] {
@@ -87,7 +94,7 @@ button:hover {
     <sup><span id="potenz"></span></sup>
     <span id="operator"></span>
     <span id="zahl2"></span>
-    <p>=</p>
+    <span id="gleichzeichen">=</span>
     <input type="number" id="ergebnis_user">
 </div>
 
