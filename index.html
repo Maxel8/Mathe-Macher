@@ -30,7 +30,7 @@ p {
 
 #aufgabe-container {
     display: flex;
-    flex-wrap: wrap; /* Zeilenumbruch erlauben */
+    flex-wrap: wrap;
     width: 90%;
     max-width: 800px;
     justify-content: center;
@@ -43,16 +43,15 @@ p {
     margin: 0 10px;
 }
 
-/* Optional: Gleichzeichen optisch hervorheben */
 #gleichzeichen {
-    flex-shrink: 0; /* verhindert, dass es schrumpft */
+    flex-shrink: 0;
 }
-/* Potenz optisch kleiner und hochgestellt */
+
 sup {
-    font-size: 0.6em;      /* Schrift bleibt klein */
-    position: relative;     
-    top: -1.2em;           /* höher über der Basiszahl */
-    margin-left: 2px;      /* Abstand zur Zahl */
+    font-size: 0.6em;
+    position: relative;
+    top: -1.2em;
+    margin-left: 2px;
 }
 
 input[type="number"] {
@@ -80,15 +79,38 @@ button:hover {
     background-color: #e60000;
 }
 
-#feedback, #ergebnis-richtig, #streak {
+#streak, #max-streak {
     font-size: 2em;
-    margin: 10px 0;
-    text-align: center;
+}
+
+.progress-container {
+  width: 100%;
+  max-width: 400px;
+  background-color: #e0e0e0;
+  border-radius: 25px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+  height: 30px;
+  margin: 20px 0;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #4caf50, #81c784);
+  border-radius: 25px 0 0 25px;
+  text-align: center;
+  line-height: 30px;
+  color: white;
+  font-weight: bold;
+  transition: width 0.4s ease-in-out;
 }
 </style>
 </head>
 <body>
-
+<div class="progress-container">
+  <div class="progress-bar" id="progressBar"></div>
+</div>
 <div id="aufgabe-container">
     <span id="zahl1"></span>
     <sup><span id="potenz"></span></sup>
@@ -99,10 +121,8 @@ button:hover {
 </div>
 
 <button onclick="check()">Prüfen</button>
-
-<p id="feedback"></p>
-<p id="ergebnis-richtig"></p>
 <p>Streak: <span id="streak"></span></p>
+<p>höchste Streak: <span id="max-streak"></span></p>
 <br>
 <a href="https://maxel8.github.io/Mathe-Macher/">
   <img src="https://img.shields.io/github/v/release/Maxel8/Mathe-Macher?label=Mathe-Macher&color=brightgreen" alt="Mathe-Macher Version">
@@ -113,21 +133,29 @@ let operator = "";
 let zahl1 = 0;
 let zahl2 = 0;
 let ergebnis = 0;
-let feedback = "";
 let streak = Number(localStorage.getItem("streak")) || 0;
+let maxStreak = Number(localStorage.getItem("maxStreak")) || 0;
 let potenz = "";
+let current = 0;
+let max = 100;
 
 document.getElementById('streak').textContent = streak;
+document.getElementById('max-streak').textContent = maxStreak;
+
+function updateProgress() {
+  const bar = document.getElementById("progressBar");
+  let percent = max === 0 ? 0 : (current / max) * 100;
+  bar.style.width = percent + "%";
+  bar.textContent = current > 0 ? Math.round(current) + " / " + max : "";
+}
+
+function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 function init() {
     potenz = "";
-
-    function randomInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
     let opCode = randomInt(1, 5);
-
     if (opCode === 1) {
         operator = "+";
         zahl1 = randomInt(1, 100);
@@ -150,49 +178,43 @@ function init() {
         zahl2 = randomInt(0, 3);
         potenz = zahl2;
     }
-
     document.getElementById('zahl1').textContent = zahl1;
     document.getElementById('operator').textContent = operator;
     document.getElementById('zahl2').textContent = operator === "" ? "" : zahl2;
     document.getElementById('potenz').textContent = operator === "" ? potenz : "";
-
-    document.getElementById('feedback').textContent = "";
-    document.getElementById('ergebnis-richtig').textContent = "";
     document.getElementById('ergebnis_user').value = "";
+    updateProgress();
 }
 
 init();
 
 function check() {
     let ergebnis_user = Number(document.getElementById('ergebnis_user').value);
-
-    if (operator === "+") {
-        ergebnis = zahl1 + zahl2;
-    } else if (operator === "-") {
-        ergebnis = zahl1 - zahl2;
-    } else if (operator === "x") {
-        ergebnis = zahl1 * zahl2;
-    } else if (operator === ":") {
-        ergebnis = zahl1 / zahl2;
-    } else if (operator === "") {
-        ergebnis = Math.pow(zahl1, zahl2);
-    }
+    if (operator === "+") ergebnis = zahl1 + zahl2;
+    else if (operator === "-") ergebnis = zahl1 - zahl2;
+    else if (operator === "x") ergebnis = zahl1 * zahl2;
+    else if (operator === ":") ergebnis = zahl1 / zahl2;
+    else ergebnis = Math.pow(zahl1, zahl2);
 
     if (ergebnis_user === ergebnis) {
-        feedback = "Richtig!";
         streak += 1;
     } else {
-        feedback = "Falsch!";
         streak = 0;
+        alert("Falsch! Das Ergebnis ist: " + ergebnis);
     }
 
     localStorage.setItem("streak", streak);
+    if (streak > maxStreak) {
+        maxStreak = streak;
+        localStorage.setItem("maxStreak", maxStreak);
+    }
 
-    document.getElementById('feedback').textContent = feedback;
     document.getElementById('streak').textContent = streak;
-    document.getElementById('ergebnis-richtig').textContent = feedback === "Falsch!" ? "Das Ergebnis ist: " + ergebnis : "";
-
-    setTimeout(init, 5000);
+    document.getElementById('max-streak').textContent = maxStreak;
+    current = streak;
+    max = Math.max(maxStreak, 1);
+    updateProgress();
+    init();
 }
 </script>
 
