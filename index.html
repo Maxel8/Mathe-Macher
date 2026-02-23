@@ -103,6 +103,7 @@ button:hover {
 <p id="feedback"></p>
 <p id="ergebnis-richtig"></p>
 <p>Streak: <span id="streak"></span></p>
+<p>höchste Streak: <span id="max-streak"></span></p>
 <br>
 <a href="https://maxel8.github.io/Mathe-Macher/">
   <img src="https://img.shields.io/github/v/release/Maxel8/Mathe-Macher?label=Mathe-Macher&color=brightgreen" alt="Mathe-Macher Version">
@@ -115,6 +116,7 @@ let zahl2 = 0;
 let ergebnis = 0;
 let feedback = "";
 let streak = Number(localStorage.getItem("streak")) || 0;
+let maxStreak = Number(localStorage.getItem("maxStreak")) || 0;
 let potenz = "";
 
 document.getElementById('streak').textContent = streak;
@@ -187,12 +189,23 @@ function check() {
     }
 
     localStorage.setItem("streak", streak);
+    if (streak > maxStreak) {
+        maxStreak = streak;
+        localStorage.setItem("maxStreak", maxStreak);
+    }
 
     document.getElementById('feedback').textContent = feedback;
     document.getElementById('streak').textContent = streak;
+    document.getElementById('max-streak').textContent = maxStreak;
     document.getElementById('ergebnis-richtig').textContent = feedback === "Falsch!" ? "Das Ergebnis ist: " + ergebnis : "";
 
-    setTimeout(init, 2500);
+
+    if (ergebnis_user === ergebnis) {
+        setTimeout(init, 500);
+    } else {
+        setTimeout(init, 1500);
+    }
+    
 }
 </script>
 
