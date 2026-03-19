@@ -108,6 +108,32 @@ button:hover {
 </style>
 </head>
 <body>
+    <div id="update-banner" style="
+    display:none;
+    position:fixed;
+    top:0;
+    width:100%;
+    background:#fffae6;
+    color:#333;
+    text-align:center;
+    padding:10px;
+    z-index:1000;
+"></div>
+
+<script>
+fetch('update-announcement.json')
+  .then(res => res.json())
+  .then(data => {
+    if(data.visible) {
+      const banner = document.getElementById('update-banner');
+      banner.textContent = data.text;
+      banner.style.display = 'block';
+    }
+  })
+  .catch(err => console.log('Keine Update-Datei gefunden', err));
+</script>
+
+
 <div class="progress-container">
   <div class="progress-bar" id="progressBar"></div>
 </div>
