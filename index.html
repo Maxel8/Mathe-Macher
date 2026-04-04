@@ -79,6 +79,26 @@ button:hover {
     background-color: #e60000;
 }
 
+.sites {
+    background-color: #000000;
+    color: white;
+    font-size: 1em;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.sites:hover {
+    background-color: #2a2a2a;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px; /* Abstand zwischen Buttons */
+}
+
 #streak, #max-streak {
     font-size: 2em;
 }
@@ -149,6 +169,14 @@ fetch('update-announcement.json')
 <button onclick="check()">Prüfen</button>
 <p>Streak: <span id="streak"></span></p>
 <p>höchste Streak: <span id="max-streak"></span></p>
+<br>
+
+<div class="button-container">
+<button class="sites" style="background-color: #4caf50;">◯</button>
+<a href="linien.html"><button class="sites">Linien</button></a>
+<a href="winkel.html"><button class="sites">Winkel</button></a>
+</div>
+
 <br>
 <a href="https://maxel8.github.io/Mathe-Macher/">
   <img src="https://img.shields.io/github/v/release/Maxel8/Mathe-Macher?label=Mathe-Macher&color=brightgreen" alt="Mathe-Macher Version">
