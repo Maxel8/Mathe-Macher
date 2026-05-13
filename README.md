@@ -20,7 +20,7 @@ https://maxel8.github.io/Mathe-Macher/
 
 Requires a modern browser with JavaScript enabled.
 
-## Roadmap v0.2
+## Roadmap
 
 - Difficulty levels (easy / medium / hard)  
 - Press Enter to submit the answer  
@@ -46,7 +46,7 @@ https://maxel8.github.io/Mathe-Macher/
 
 Benötigt einen modernen Browser mit aktiviertem JavaScript.
 
-## Roadmap v0.2
+## Roadmap
 
 - Schwierigkeitsstufen (leicht / mittel / schwer)  
 - Enter-Taste zum Bestätigen der Eingabe  
