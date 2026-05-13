@@ -4,7 +4,8 @@ self.addEventListener("install", event => {
       return cache.addAll([
         "/",
         "/manifest.json",
-        "/service-worker.js"
+        "/service-worker.js",
+        "/grundrechnen.html"
       ]);
     })
   );
