@@ -52,10 +52,17 @@
   <body>
     <p><b>Mathe-Macher</b></p>
     <button id="grundrechnen">Grundrechenarten</button>
+    <br>
+    <p>Rechtecke</p>
     <button id="fläche_rechnen">Flächeninhalt: Berechnung</button>
+    <button id="umfang_rechnen">Umfang: Berechnung</button>
+    <br>
+    <p>Einheiten umrechnen</p>
     <button disabled id="fläche_umwandeln">
-      Flächeninhalt: Einheiten umrechnen
+      Flächeninhalt
     </button>
+    <br>
+    <br>
     <button id="info" style="background-color: black; font-size: 1em">
       Mathe-Macher
     </button>
@@ -73,12 +80,16 @@
       const flächeRechnenBtn = document.getElementById("fläche_rechnen");
       const flächeUmwandelnBtn = document.getElementById("fläche_umwandeln");
       const infoBtn = document.getElementById("info");
+      const umfangRechnenBtn = document.getElementById("umfang_rechnen");
 
       grundrechnenBtn.addEventListener("click", () => {
         window.location.href = "grundrechnen.html";
       });
       flächeRechnenBtn.addEventListener("click", () => {
         window.location.href = "fläche_rechnen.html";
+      });
+      umfangRechnenBtn.addEventListener("click", () => {
+        window.location.href = "umfang_rechnen.html";
       });
       flächeUmwandelnBtn.addEventListener("click", () => {
         window.location.href = "fläche_umwandeln.html";
